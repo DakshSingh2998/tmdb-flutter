@@ -46,4 +46,15 @@ class MovieRepository {
       throw Exception("Failed to load favorite movies: $e");
     }
   }
+
+  Future<Movie> fetchMovieDetails({required int movieId}) async {
+    try {
+      final dio = DioClient().dio;
+      final client = RestClient(dio);
+      final response = await client.getMovieDetails(movieId);
+      return response;
+    } catch (e) {
+      throw Exception("Failed to load movie details: $e");
+    }
+  }
 }

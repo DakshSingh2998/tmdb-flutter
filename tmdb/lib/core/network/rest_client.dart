@@ -28,6 +28,9 @@ abstract class RestClient {
     @Path('account_id') String accountId,
     @Query('page') int page,
   );
+
+  @GET('movie/{movie_id}')
+  Future<Movie> getMovieDetails(@Path('movie_id') int movieId);
 }
 
 class DioClient {

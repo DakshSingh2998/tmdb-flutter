@@ -13,8 +13,13 @@ import 'movie_detail_state.dart'; // Import your Bloc or Cubit
 
 class MovieDetailView extends StatefulWidget {
   final Movie movie;
+  final bool showSaveButton;
 
-  const MovieDetailView({super.key, required this.movie});
+  const MovieDetailView({
+    super.key,
+    required this.movie,
+    this.showSaveButton = true,
+  });
 
   @override
   State<MovieDetailView> createState() => _MovieDetailViewState();
@@ -74,28 +79,32 @@ class _MovieDetailViewState extends State<MovieDetailView> {
             appBar: AppBar(
               title: Text(movie.title),
 
-              actions: (state.status == ScreenStatus.loading)
-                  ? [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ]
-                  : [
-                      IconButton(
-                        icon: Icon(
-                          isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                          color: Colors.black,
-                        ),
-                        onPressed: () async {
-                          // await _toggleBookmark();
-                          context.read<MovieDetailBloc>().add(
-                            MarkAsFavorite(movie.id, !isBookmarked),
-                          );
-                        },
-                      ),
-                    ],
+              actions: widget.showSaveButton
+                  ? (state.status == ScreenStatus.loading)
+                        ? [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(),
+                            ),
+                          ]
+                        : [
+                            IconButton(
+                              icon: Icon(
+                                isBookmarked
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: Colors.black,
+                              ),
+                              onPressed: () async {
+                                // await _toggleBookmark();
+                                context.read<MovieDetailBloc>().add(
+                                  MarkAsFavorite(movie.id, !isBookmarked),
+                                );
+                              },
+                            ),
+                          ]
+                  : null,
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
@@ -138,7 +147,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
 
                   // Original title and language
                   Text(
-                    "${movie.originalTitle} (${movie.originalLanguage.toUpperCase()})",
+                    "${movie.originalTitle} (${movie.originalLanguage?.toUpperCase()})",
                     style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 12),
@@ -186,7 +195,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "Popularity: ${movie.popularity.toStringAsFixed(1)}",
+                        "Popularity: ${movie.popularity?.toStringAsFixed(1)}",
                         style: const TextStyle(fontSize: 14),
                       ),
                     ],
@@ -194,7 +203,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                   const SizedBox(height: 12),
 
                   // Adult flag
-                  if (movie.adult)
+                  if (movie.adult == true)
                     Row(
                       children: const [
                         Icon(Icons.warning, size: 18, color: Colors.redAccent),
@@ -205,14 +214,14 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                         ),
                       ],
                     ),
-                  if (movie.adult) const SizedBox(height: 12),
+                  if (movie.adult == true) const SizedBox(height: 12),
 
                   // Genres (just IDs here, you can map IDs to names)
-                  if (movie.genreIds.isNotEmpty)
+                  if (movie.genreIds?.isNotEmpty == true)
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: movie.genreIds
+                      children: (movie.genreIds ?? [])
                           .map(
                             (id) => Chip(
                               label: Text("Genre $id"),
@@ -230,7 +239,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    movie.overview,
+                    movie.overview ?? "",
                     style: const TextStyle(fontSize: 14, height: 1.5),
                   ),
                 ],

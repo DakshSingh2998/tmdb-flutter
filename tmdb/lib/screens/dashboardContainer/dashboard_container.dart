@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../dashboard/dashboard.dart';
-import '../savedMoviesOnline/saved_movies.dart';
+import '../savedMoviesOffline/saved_movies.dart';
 import '../searchMovie/search_movie.dart';
 
 class DashboardContainerView extends StatefulWidget {
@@ -82,7 +82,7 @@ class _DashboardContainerViewState extends State<DashboardContainerView> {
       }
     }
     if (index == 2) {
-      screenCache[index] = SavedMoviesView(key: UniqueKey());
+      screenCache[index] = SavedMovies(key: UniqueKey());
     }
 
     setState(() {

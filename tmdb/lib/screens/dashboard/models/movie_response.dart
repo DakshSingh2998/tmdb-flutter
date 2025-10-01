@@ -40,34 +40,34 @@ class Movie extends HiveObject {
   @JsonKey(name: "poster_path")
   final String? posterPath;
 
-  final bool adult;
+  final bool? adult;
 
   @JsonKey(name: "backdrop_path")
   final String? backdropPath;
 
   @JsonKey(name: "genre_ids")
-  final List<int> genreIds;
+  final List<int>? genreIds;
 
   @JsonKey(name: "original_language")
-  final String originalLanguage;
+  final String? originalLanguage;
 
   @JsonKey(name: "original_title")
-  final String originalTitle;
+  final String? originalTitle;
 
-  final String overview;
+  final String? overview;
 
-  final double popularity;
+  final double? popularity;
 
   @JsonKey(name: "release_date")
-  final String releaseDate;
+  final String? releaseDate;
 
   final bool video;
 
   @JsonKey(name: "vote_average")
-  final double voteAverage;
+  final double? voteAverage;
 
   @JsonKey(name: "vote_count")
-  final int voteCount;
+  final int? voteCount;
 
   Movie({
     required this.id,

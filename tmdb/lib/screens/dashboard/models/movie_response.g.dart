@@ -5,6 +5,7 @@ part of 'movie_response.dart';
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
+
 class MovieResponseAdapter extends TypeAdapter<MovieResponse> {
   @override
   final typeId = 2;
@@ -25,17 +26,18 @@ class MovieResponseAdapter extends TypeAdapter<MovieResponse> {
 
   @override
   void write(BinaryWriter writer, MovieResponse obj) {
-    writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.page)
-      ..writeByte(1)
-      ..write(obj.results)
-      ..writeByte(2)
-      ..write(obj.totalPages)
-      ..writeByte(3)
-      ..write(obj.totalResults);
+    writer.writeByte(0);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovieResponseAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class MovieAdapter extends TypeAdapter<Movie> {
@@ -52,53 +54,34 @@ class MovieAdapter extends TypeAdapter<Movie> {
       id: fields[0] as int,
       title: fields[1] as String,
       posterPath: fields[2] as String?,
-      adult: fields[3] as bool,
+      adult: fields[3] as bool?,
       backdropPath: fields[4] as String?,
-      genreIds: (fields[5] as List).cast<int>(),
-      originalLanguage: fields[6] as String,
-      originalTitle: fields[7] as String,
-      overview: fields[8] as String,
-      popularity: fields[9] as double,
-      releaseDate: fields[10] as String,
+      genreIds: (fields[5] as List?)?.cast<int>(),
+      originalLanguage: fields[6] as String?,
+      originalTitle: fields[7] as String?,
+      overview: fields[8] as String?,
+      popularity: (fields[9] as num?)?.toDouble(),
+      releaseDate: fields[10] as String?,
       video: fields[11] as bool,
-      voteAverage: fields[12] as double,
-      voteCount: fields[13] as int,
+      voteAverage: (fields[12] as num?)?.toDouble(),
+      voteCount: (fields[13] as num?)?.toInt(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Movie obj) {
-    writer
-      ..writeByte(14)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.title)
-      ..writeByte(2)
-      ..write(obj.posterPath)
-      ..writeByte(3)
-      ..write(obj.adult)
-      ..writeByte(4)
-      ..write(obj.backdropPath)
-      ..writeByte(5)
-      ..write(obj.genreIds)
-      ..writeByte(6)
-      ..write(obj.originalLanguage)
-      ..writeByte(7)
-      ..write(obj.originalTitle)
-      ..writeByte(8)
-      ..write(obj.overview)
-      ..writeByte(9)
-      ..write(obj.popularity)
-      ..writeByte(10)
-      ..write(obj.releaseDate)
-      ..writeByte(11)
-      ..write(obj.video)
-      ..writeByte(12)
-      ..write(obj.voteAverage)
-      ..writeByte(13)
-      ..write(obj.voteCount);
+    writer.writeByte(0);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovieAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 // **************************************************************************
@@ -127,19 +110,19 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
   id: (json['id'] as num).toInt(),
   title: json['title'] as String,
   posterPath: json['poster_path'] as String?,
-  adult: json['adult'] as bool,
+  adult: json['adult'] as bool?,
   backdropPath: json['backdrop_path'] as String?,
-  genreIds: (json['genre_ids'] as List<dynamic>)
-      .map((e) => (e as num).toInt())
+  genreIds: (json['genre_ids'] as List<dynamic>?)
+      ?.map((e) => (e as num).toInt())
       .toList(),
-  originalLanguage: json['original_language'] as String,
-  originalTitle: json['original_title'] as String,
-  overview: json['overview'] as String,
-  popularity: (json['popularity'] as num).toDouble(),
-  releaseDate: json['release_date'] as String,
+  originalLanguage: json['original_language'] as String?,
+  originalTitle: json['original_title'] as String?,
+  overview: json['overview'] as String?,
+  popularity: (json['popularity'] as num?)?.toDouble(),
+  releaseDate: json['release_date'] as String?,
   video: json['video'] as bool,
-  voteAverage: (json['vote_average'] as num).toDouble(),
-  voteCount: (json['vote_count'] as num).toInt(),
+  voteAverage: (json['vote_average'] as num?)?.toDouble(),
+  voteCount: (json['vote_count'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{

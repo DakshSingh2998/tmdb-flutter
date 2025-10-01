@@ -1,12 +1,17 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'core/extension/color/color_extension.dart';
 import 'screens/dashboard/models/movie_response.dart';
 import 'screens/dashboardContainer/dashboard_container.dart';
+import 'screens/movieDetail/movie_detail_deeplink.dart';
 
 final RouteObserver<ModalRoute<void>> routeObserver =
     RouteObserver<ModalRoute<void>>();
+const kWindowsScheme = 'tmdb';
 
 void main() async {
   await Hive.initFlutter();
@@ -15,8 +20,51 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initDeepLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  Future<void> initDeepLinks() async {
+    // Handle links
+    _linkSubscription = AppLinks().uriLinkStream.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      openAppLink(uri);
+    });
+  }
+
+  void openAppLink(Uri uri) {
+    if (uri.path == "/movie" && uri.queryParameters.containsKey("movieId")) {
+      final movieId = int.tryParse(uri.queryParameters["movieId"]!);
+      if (movieId != null) {
+        _navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) => MovieDetailDeeplink(movieId: movieId),
+          ),
+        );
+      }
+    }
+  }
 
   // This widget is the root of your application.
   @override
@@ -24,6 +72,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       navigatorObservers: [routeObserver],
+      navigatorKey: _navigatorKey,
       theme: ThemeData(
         fontFamily: 'Poppins',
         primarySwatch: myMainColor,
