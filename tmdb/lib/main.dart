@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:tmdb/screens/dashboard/dashboard.dart';
 
 import 'core/extension/color/color_extension.dart';
 import 'screens/dashboard/models/movie_response.dart';
+import 'screens/dashboardContainer/dashboard_container.dart';
+
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
 
 void main() async {
   await Hive.initFlutter();
@@ -20,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         fontFamily: 'Poppins',
         primarySwatch: myMainColor,
@@ -73,7 +77,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
       ),
-      home: const DashboardView(),
+      home: const DashboardContainerView(),
     );
   }
 }

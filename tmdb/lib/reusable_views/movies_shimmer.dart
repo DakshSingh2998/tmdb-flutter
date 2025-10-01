@@ -1,26 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MovieShimmer extends StatelessWidget {
-  const MovieShimmer({super.key});
+  final bool isGrid; // same as MovieCard to adapt design
+
+  const MovieShimmer({super.key, this.isGrid = true});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 6,
-      itemBuilder: (_, __) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Row(
-            children: [
-              Container(width: 50, height: 75, color: Colors.white),
-              const SizedBox(width: 16),
-              Expanded(child: Container(height: 20, color: Colors.white)),
-            ],
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: isGrid ? _buildGridShimmer() : _buildListShimmer(),
+    );
+  }
+
+  Widget _buildGridShimmer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Shimmer(
+          duration: const Duration(milliseconds: 1500),
+          child: Container(
+            height: 180,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+            ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Shimmer(
+            duration: const Duration(milliseconds: 1500),
+            child: Container(
+              height: 14,
+              width: 100,
+              color: Colors.grey.shade300,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildListShimmer() {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Shimmer(
+            duration: const Duration(milliseconds: 1500),
+            child: Container(
+              width: 60,
+              height: 90,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Shimmer(
+                  duration: const Duration(milliseconds: 1500),
+                  child: Container(
+                    height: 16,
+                    width: double.infinity,
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Shimmer(
+                  duration: const Duration(milliseconds: 1500),
+                  child: Container(
+                    height: 14,
+                    width: double.infinity,
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Shimmer(
+                  duration: const Duration(milliseconds: 1500),
+                  child: Container(
+                    height: 14,
+                    width: 150,
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

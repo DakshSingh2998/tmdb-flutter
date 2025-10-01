@@ -1,30 +1,30 @@
 import 'package:equatable/equatable.dart';
 import '../../core/utilities/common_utilities.dart';
-import 'models/movie_response.dart';
+import '../dashboard/models/movie_response.dart';
 
-class DashboardState extends Equatable {
+class SavedMoviesState extends Equatable {
   final ScreenStatus status;
   final List<Movie> movies;
   final bool hasReachedMax;
   final int currentPage;
   final String toastMessage;
 
-  const DashboardState({
+  const SavedMoviesState({
     this.status = ScreenStatus.initial,
     this.movies = const [],
     this.hasReachedMax = false,
-    this.currentPage = 0,
+    this.currentPage = 1,
     this.toastMessage = "",
   });
 
-  DashboardState copyWith({
+  SavedMoviesState copyWith({
     ScreenStatus? status,
     List<Movie>? movies,
     bool? hasReachedMax,
     int? currentPage,
     String? toastMessage,
   }) {
-    return DashboardState(
+    return SavedMoviesState(
       status: status ?? this.status,
       movies: movies ?? this.movies,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,

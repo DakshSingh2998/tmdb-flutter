@@ -2,7 +2,8 @@ import 'package:hive_ce/hive.dart';
 import '../hive_box_helper.dart';
 
 enum HiveBoxNames {
-  popularMovieCache('popular_movie_cache', 2);
+  popularMovieCache('popular_movie_cache', 2),
+  bookmarkedMovies('bookmarked_movies', 3);
 
   final String boxName;
   final int typeId;
@@ -10,7 +11,7 @@ enum HiveBoxNames {
   const HiveBoxNames(this.boxName, this.typeId);
 }
 
-class CommonManager<T1, T2 extends TypeAdapter<T1>> {
+class CommonManager<T1, T2> {
   late String _boxName;
   late HiveBoxHelper<T1> _helper;
 
@@ -18,13 +19,15 @@ class CommonManager<T1, T2 extends TypeAdapter<T1>> {
   Future<void> init({
     required bool encrypted,
     required String boxName,
-    required T2 adapter,
+    required T2? adapter,
     required int typeId,
   }) async {
     _boxName = boxName;
     _helper = HiveBoxHelper<T1>(boxName: _boxName);
 
-    if (!Hive.isAdapterRegistered(typeId)) {
+    if (adapter != null &&
+        adapter is TypeAdapter &&
+        !Hive.isAdapterRegistered(typeId)) {
       Hive.registerAdapter(adapter);
     }
 

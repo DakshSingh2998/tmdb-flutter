@@ -1,19 +1,20 @@
 import 'package:equatable/equatable.dart';
 
-abstract class DashboardEvent extends Equatable {
+abstract class SavedMoviesEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class FetchMovies extends DashboardEvent {
+class FetchMovies extends SavedMoviesEvent {
   final int page;
-  FetchMovies(this.page);
+
+  FetchMovies({required this.page});
 
   @override
   List<Object?> get props => [page];
 }
 
-class ClearToastMessage extends DashboardEvent {
+class ClearToastMessage extends SavedMoviesEvent {
   @override
   List<Object?> get props => [];
 }

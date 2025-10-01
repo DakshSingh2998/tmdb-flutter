@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/network/check_network.dart';
 import '../../core/utilities/common_utilities.dart';
 import '../../core/utilities/hive/popularMovieCache/popular_movie_cache.dart';
 import '../../services/movie_service.dart';
@@ -12,7 +14,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   DashboardBloc(this.movieRepository) : super(const DashboardState()) {
     on<FetchMovies>(_onFetchMovies);
-    on<FetchNextPage>(_onFetchNextPage);
+    on<ClearToastMessage>((event, emit) {
+      emit(state.copyWith(toastMessage: ""));
+    });
   }
 
   Future<void> _onFetchMovies(
@@ -21,56 +25,42 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ) async {
     try {
       emit(state.copyWith(status: ScreenStatus.loading));
-
-      final cacheManager = await PopularMovieCacheManager.getInstance();
-      final cached = await cacheManager.getPage(event.page);
-
       MovieResponse response;
-
-      if (cached != null) {
-        // Fetch fresh data from API
-        final fresh = await movieRepository.fetchMovies(page: event.page);
-
-        // If totalPages changed, reset cache and refetch
-        if (fresh.totalPages != cached.totalPages) {
-          await cacheManager.clearAllPages();
-          await cacheManager.savePage(fresh);
-          response = fresh;
-        } else {
-          response = cached;
-        }
-      } else {
-        // No cache, fetch and save
-        response = await movieRepository.fetchMovies(page: event.page);
-        try {
-          await cacheManager.savePage(response);
-        } catch (e) {
-          print(e);
-        }
+      MovieResponse? cached;
+      PopularMovieCacheManager? cacheManager;
+      try {
+        cacheManager = await PopularMovieCacheManager.getInstance();
+        cached = await cacheManager.getPage(event.page);
+      } catch (e) {
+        debugPrint(e.toString());
       }
 
-      emit(
-        state.copyWith(
-          status: ScreenStatus.success,
-          movies: response.results,
-          currentPage: response.page,
-          hasReachedMax: response.page >= response.totalPages,
-        ),
-      );
-    } catch (e) {
-      emit(state.copyWith(status: ScreenStatus.failure));
-    }
-  }
+      if (cached != null) {
+        // refresh data if needed
+        response = cached;
+      } else {
+        // No cache, fetch and save
+        final hasConnection = await hasInternetConnection();
+        if (!hasConnection) {
+          emit(state.copyWith(status: ScreenStatus.failure));
+          if (state.toastMessage.isEmpty) {
+            emit(
+              state.copyWith(
+                toastMessage: "Connect to the internet to load more data",
+              ),
+            );
+          }
+          return;
+        }
 
-  Future<void> _onFetchNextPage(
-    FetchNextPage event,
-    Emitter<DashboardState> emit,
-  ) async {
-    if (state.hasReachedMax || state.status == ScreenStatus.loading) return;
-
-    try {
-      final nextPage = state.currentPage + 1;
-      final response = await movieRepository.fetchMovies(page: nextPage);
+        response = await movieRepository.fetchMovies(page: event.page);
+        try {
+          await cacheManager?.savePage(response);
+        } catch (e) {
+          emit(state.copyWith(status: ScreenStatus.failure));
+          debugPrint(e.toString());
+        }
+      }
 
       emit(
         state.copyWith(
@@ -80,8 +70,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           hasReachedMax: response.page >= response.totalPages,
         ),
       );
-    } catch (_) {
+    } catch (e) {
       emit(state.copyWith(status: ScreenStatus.failure));
     }
+  }
+
+  Future<bool> hasInternetConnection() async {
+    final checker = NetworkChecker();
+    return await checker.isConnected();
   }
 }

@@ -3,6 +3,7 @@ import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 import '../../screens/dashboard/models/movie_response.dart';
+import '../../screens/movieDetail/models/movie_set_favourite.dart';
 part 'rest_client.g.dart';
 
 const baseUrl = "https://api.themoviedb.org/3/";
@@ -15,6 +16,18 @@ abstract class RestClient {
 
   @GET('/movie/popular')
   Future<MovieResponse> getPopularMovies(@Query('page') int page);
+
+  @POST('account/{account_id}/favorite')
+  Future<MovieSetFavouriteResponse> markAsFavorite(
+    @Path('account_id') String accountId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @GET('account/{account_id}/favorite/movies')
+  Future<MovieResponse> getFavoriteMovies(
+    @Path('account_id') String accountId,
+    @Query('page') int page,
+  );
 }
 
 class DioClient {
@@ -33,6 +46,7 @@ class DioClient {
           'Authorization': staticToken,
           'Content-Type': 'application/json',
         },
+        connectTimeout: Duration(seconds: 20),
       ),
     );
 

@@ -6,26 +6,26 @@ import '../../reusable_views/movie_card.dart';
 import '../../reusable_views/retry_view.dart';
 import '../../services/movie_service.dart';
 import '../movieDetail/movie_detail.dart';
-import 'dashboard_bloc.dart';
-import 'dashboard_event.dart';
-import 'dashboard_state.dart';
+import 'saved_movies_bloc.dart';
+import 'saved_movies_event.dart';
+import 'saved_movies_state.dart';
 
-class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+class SavedMoviesView extends StatefulWidget {
+  const SavedMoviesView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<SavedMoviesView> createState() => _SavedMoviesViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
-  late final DashboardBloc _bloc;
+class _SavedMoviesViewState extends State<SavedMoviesView> {
+  late final SavedMoviesBloc _bloc;
   late final ScrollController _scrollController;
   DateTime? _lastToastShown;
 
   @override
   void initState() {
     super.initState();
-    _bloc = DashboardBloc(MovieRepository())..add(FetchMovies(1));
+    _bloc = SavedMoviesBloc()..add(FetchMovies(page: 1));
     _scrollController = ScrollController()..addListener(_onScroll);
   }
 
@@ -34,7 +34,7 @@ class _DashboardViewState extends State<DashboardView> {
         _scrollController.position.maxScrollExtent - 200) {
       final state = _bloc.state;
       if (!state.hasReachedMax && state.status != ScreenStatus.loading) {
-        _bloc.add(FetchMovies(state.currentPage + 1));
+        _bloc.add(FetchMovies(page: state.currentPage + 1));
       }
     }
   }
@@ -52,8 +52,8 @@ class _DashboardViewState extends State<DashboardView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Dashboard")),
-        body: BlocConsumer<DashboardBloc, DashboardState>(
+        appBar: AppBar(title: const Text("Saved Movies")),
+        body: BlocConsumer<SavedMoviesBloc, SavedMoviesState>(
           listenWhen: (previous, current) =>
               previous.toastMessage != current.toastMessage,
           listener: (context, state) {
@@ -84,7 +84,7 @@ class _DashboardViewState extends State<DashboardView> {
                 child: RetryView(
                   message: "Failed to load movies",
                   onRetry: () {
-                    _bloc.add(FetchMovies(state.currentPage + 1));
+                    _bloc.add(FetchMovies(page: state.currentPage + 1));
                   },
                 ),
               );
@@ -92,7 +92,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             return RefreshIndicator(
               onRefresh: () async {
-                _bloc.add(FetchMovies(1)); // Reset to page 1
+                _bloc.add(FetchMovies(page: 1)); // Reset to page 1
               },
               child: GridView.builder(
                 controller: _scrollController,
