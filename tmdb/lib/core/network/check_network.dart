@@ -1,34 +1,38 @@
 import 'dart:async';
-
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class NetworkChecker {
   final _controller = StreamController<bool>.broadcast();
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool? _lastStatus;
-  Timer? _timer;
 
   NetworkChecker() {
-    // Start periodic connectivity checks (e.g., every 2 seconds)
-    _timer = Timer.periodic(Duration(seconds: 2), (_) async {
-      final currentStatus = await isConnected();
-      if (_lastStatus != currentStatus) {
-        _lastStatus = currentStatus;
-        _controller.add(currentStatus);
+    // Listen to connectivity changes
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((results) {
+      final hasInternet = _mapConnectivity(results);
+      if (_lastStatus != hasInternet) {
+        _lastStatus = hasInternet;
+        _controller.add(hasInternet);
       }
     });
   }
 
   /// One-time check
   Future<bool> isConnected() async {
-    final bool isConnected = await InternetConnection().hasInternetAccess;
-    return isConnected;
+    final results = await Connectivity().checkConnectivity();
+    return _mapConnectivity(results);
   }
 
-  /// Stream of connectivity changes
+  /// Convert ConnectivityResult list into simple bool
+  bool _mapConnectivity(List<ConnectivityResult> results) {
+    return results.isNotEmpty && !results.contains(ConnectivityResult.none);
+  }
+
+  /// Stream of connectivity status (true = online, false = offline)
   Stream<bool> get onConnectivityChanged => _controller.stream;
 
   void dispose() {
-    _timer?.cancel();
+    _connectivitySub?.cancel();
     _controller.close();
   }
 }
