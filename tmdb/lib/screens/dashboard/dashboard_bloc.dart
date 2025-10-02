@@ -55,7 +55,17 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         );
       }
 
-      if (!await hasInternetConnection()) return;
+      if (!await hasInternetConnection()) {
+        if (cachedMovies.isEmpty) {
+          emit(
+            state.copyWith(
+              toastMessage: "Please connect to Internet",
+              status: ScreenStatus.success,
+            ),
+          );
+        }
+        return;
+      }
 
       final response = await movieRepository.fetchMovies(page: event.page);
       final apiMovies = response.results;

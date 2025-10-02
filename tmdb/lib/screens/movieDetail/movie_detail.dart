@@ -65,7 +65,6 @@ class _MovieDetailViewState extends State<MovieDetailView> {
       child: BlocConsumer<MovieDetailBloc, MovieDetailState>(
         listener: (context, state) {
           if (state.toastMessage.isNotEmpty) {
-            context.read<MovieDetailBloc>().add(ClearToastMessage());
             if (state.status == ScreenStatus.success) {
               _toggleBookmark();
             }
@@ -73,6 +72,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
               context,
             ).showSnackBar(SnackBar(content: Text(state.toastMessage)));
           }
+          _bloc.add(ClearToastMessage());
         },
         builder: (context, state) {
           return Scaffold(

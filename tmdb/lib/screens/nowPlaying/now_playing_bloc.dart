@@ -55,7 +55,17 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
         );
       }
 
-      if (!await hasInternetConnection()) return;
+      if (!await hasInternetConnection()) {
+        if (cachedMovies.isEmpty) {
+          emit(
+            state.copyWith(
+              toastMessage: "Please connect to Internet",
+              status: ScreenStatus.success,
+            ),
+          );
+        }
+        return;
+      }
 
       final response = await movieRepository.fetchNowPlaying(page: event.page);
       final apiMovies = response.results;

@@ -14,8 +14,3 @@ class ClearToastMessage extends SearchMovieEvent {
   @override
   List<Object?> get props => [];
 }
-
-class ConnectivityChanged extends SearchMovieEvent {
-  final bool hasInternet;
-  ConnectivityChanged(this.hasInternet);
-}

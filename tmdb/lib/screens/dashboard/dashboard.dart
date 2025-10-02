@@ -64,7 +64,7 @@ class _DashboardViewState extends State<DashboardView> {
                       const Duration(seconds: 3)) {
                 _lastToastShown = now;
                 final toastMessage = state.toastMessage;
-                _bloc.add(ClearToastMessage());
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(toastMessage),
@@ -74,6 +74,7 @@ class _DashboardViewState extends State<DashboardView> {
                 );
               }
             }
+            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             if (state.status == ScreenStatus.failure && state.movies.isEmpty) {

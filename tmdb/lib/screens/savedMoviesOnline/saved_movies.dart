@@ -64,7 +64,6 @@ class _SavedMoviesViewState extends State<SavedMoviesView> {
                       const Duration(seconds: 3)) {
                 _lastToastShown = now;
                 final toastMessage = state.toastMessage;
-                _bloc.add(ClearToastMessage());
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(toastMessage),
@@ -74,6 +73,7 @@ class _SavedMoviesViewState extends State<SavedMoviesView> {
                 );
               }
             }
+            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             if (state.status == ScreenStatus.loading && state.movies.isEmpty) {

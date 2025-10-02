@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +15,8 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
   final MovieRepository movieRepository;
   final TextEditingController controller = TextEditingController();
   final dbHelper = MovieDBHelper();
+  late final StreamSubscription _connectivitySubscription;
+  final NetworkChecker _networkChecker = NetworkChecker();
 
   SearchMovieBloc(this.movieRepository) : super(const SearchMovieState()) {
     on<FetchMovies>(
@@ -31,9 +35,11 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
         return MergeStream([debounced, paginated]);
       },
     );
-
-    on<ConnectivityChanged>((event, emit) {
-      if (controller.text.isNotEmpty) {
+    // Start listening to connectivity changes
+    _connectivitySubscription = _networkChecker.onConnectivityChanged.listen((
+      status,
+    ) {
+      if (status && controller.text.isNotEmpty) {
         add(FetchMovies(1));
       }
     });
@@ -114,7 +120,6 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
   }
 
   Future<bool> hasInternetConnection() async {
-    final checker = NetworkChecker();
-    return await checker.isConnected();
+    return await _networkChecker.isConnected();
   }
 }

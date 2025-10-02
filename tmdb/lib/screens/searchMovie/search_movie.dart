@@ -72,7 +72,6 @@ class SearchMovieViewState extends State<SearchMovieView> {
                       const Duration(seconds: 3)) {
                 _lastToastShown = now;
                 final toastMessage = state.toastMessage;
-                _bloc.add(ClearToastMessage());
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(toastMessage),
@@ -82,6 +81,7 @@ class SearchMovieViewState extends State<SearchMovieView> {
                 );
               }
             }
+            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             return Column(

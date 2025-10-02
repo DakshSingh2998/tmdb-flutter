@@ -19,7 +19,7 @@ class _DashboardContainerViewState extends State<DashboardContainerView> {
   @override
   void initState() {
     super.initState();
-    screenCache = List<Widget?>.filled(3, null); // 3 tabs
+    screenCache = List<Widget?>.filled(4, null); // 3 tabs
     screenCache[0] = DashboardView(); // Load first screen by default
   }
 
