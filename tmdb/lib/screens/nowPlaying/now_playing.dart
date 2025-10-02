@@ -52,7 +52,7 @@ class _NowPlayingViewState extends State<NowPlayingView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Now Playing")),
+        appBar: AppBar(title: Text("nowPlaying".loc)),
         body: BlocConsumer<NowPlayingBloc, NowPlayingState>(
           listenWhen: (previous, current) =>
               previous.toastMessage != current.toastMessage,
@@ -64,7 +64,6 @@ class _NowPlayingViewState extends State<NowPlayingView> {
                       const Duration(seconds: 3)) {
                 _lastToastShown = now;
                 final toastMessage = state.toastMessage;
-                _bloc.add(ClearToastMessage());
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(toastMessage),
@@ -72,6 +71,7 @@ class _NowPlayingViewState extends State<NowPlayingView> {
                     duration: const Duration(seconds: 3),
                   ),
                 );
+                _bloc.add(ClearToastMessage());
               }
             }
           },
@@ -79,7 +79,7 @@ class _NowPlayingViewState extends State<NowPlayingView> {
             if (state.status == ScreenStatus.failure && state.movies.isEmpty) {
               return Center(
                 child: RetryView(
-                  message: "Failed to load movies",
+                  message: "failedToLoadMovies",
                   onRetry: () {
                     _bloc.add(FetchMovies(state.currentPage + 1));
                   },

@@ -60,7 +60,7 @@ class SearchMovieViewState extends State<SearchMovieView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Search Movies")),
+        appBar: AppBar(title: Text("Search".loc)),
         body: BlocConsumer<SearchMovieBloc, SearchMovieState>(
           listenWhen: (previous, current) =>
               previous.toastMessage != current.toastMessage,
@@ -79,9 +79,9 @@ class SearchMovieViewState extends State<SearchMovieView> {
                     duration: const Duration(seconds: 3),
                   ),
                 );
+                _bloc.add(ClearToastMessage());
               }
             }
-            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             return Column(
@@ -90,7 +90,7 @@ class SearchMovieViewState extends State<SearchMovieView> {
                   padding: const EdgeInsets.all(16.0),
                   child: DTextField(
                     config: DTextFieldConfig(
-                      hintText: "Search",
+                      hintText: "Search".loc,
                       controller: _bloc.controller,
                     ),
                   ),
@@ -118,7 +118,7 @@ class SearchMovieViewState extends State<SearchMovieView> {
                     state.movies.isEmpty)
                   Center(
                     child: RetryView(
-                      message: "Failed to load movies",
+                      message: "failedToLoadMovies".loc,
                       onRetry: () {
                         _bloc.add(FetchMovies(1));
                       },
@@ -128,7 +128,7 @@ class SearchMovieViewState extends State<SearchMovieView> {
                     state.movies.isEmpty)
                   Center(
                     child: Text(
-                      "Begin typing to search movies",
+                      "beginTyping".loc,
                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                     ),
                   ),

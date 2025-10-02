@@ -52,7 +52,7 @@ class _DashboardViewState extends State<DashboardView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Dashboard")),
+        appBar: AppBar(title: Text("dashboard".loc)),
         body: BlocConsumer<DashboardBloc, DashboardState>(
           listenWhen: (previous, current) =>
               previous.toastMessage != current.toastMessage,
@@ -72,15 +72,15 @@ class _DashboardViewState extends State<DashboardView> {
                     duration: const Duration(seconds: 3),
                   ),
                 );
+                _bloc.add(ClearToastMessage());
               }
             }
-            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             if (state.status == ScreenStatus.failure && state.movies.isEmpty) {
               return Center(
                 child: RetryView(
-                  message: "Failed to load movies",
+                  message: "failedToLoadMovies".loc,
                   onRetry: () {
                     _bloc.add(FetchMovies(state.currentPage + 1));
                   },

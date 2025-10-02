@@ -71,9 +71,9 @@ class _SavedMoviesViewState extends State<SavedMoviesView> {
                     duration: const Duration(seconds: 3),
                   ),
                 );
+                _bloc.add(ClearToastMessage());
               }
             }
-            _bloc.add(ClearToastMessage());
           },
           builder: (context, state) {
             if (state.status == ScreenStatus.loading && state.movies.isEmpty) {

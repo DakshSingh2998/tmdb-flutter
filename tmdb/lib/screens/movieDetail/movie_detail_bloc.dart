@@ -26,8 +26,8 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
               state.copyWith(
                 status: ScreenStatus.success,
                 toastMessage: event.favorite
-                    ? "Marked as favorite"
-                    : "Removed from favorites",
+                    ? "Markedasfavorite"
+                    : "Removedfromfavourite".loc,
               ),
             );
           } else {

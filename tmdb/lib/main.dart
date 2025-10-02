@@ -4,6 +4,7 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
+import 'core/bundle/localization/localization_store.dart';
 import 'core/extension/color/color_extension.dart';
 import 'screens/dashboard/models/movie_response.dart';
 import 'screens/dashboardContainer/dashboard_container.dart';
@@ -15,6 +16,7 @@ const kWindowsScheme = 'tmdb';
 
 void main() async {
   await Hive.initFlutter();
+  await LocalizationStore().load();
   Hive.registerAdapter(MovieResponseAdapter());
   Hive.registerAdapter(MovieAdapter());
   runApp(const MyApp());

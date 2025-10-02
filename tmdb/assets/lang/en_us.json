@@ -1,0 +1,13 @@
+{
+    "somethingWentWrong": "Something went wrong",
+    "retry": "Retry",
+    "pleaseConnectToInternet": "Please connect to Internet",
+    "failedToLoadMovies": "Failed to load movies",
+    "dashboard": "Dashboard",
+    "nowPlaying": "Now Playing",
+    "Markedasfavorite": "Marked as favorite",
+    "Removedfromfavourite": "Removed from favourite",
+    "beginTyping": "Begin typing to search movies",
+    "Search": "Search"
+
+}

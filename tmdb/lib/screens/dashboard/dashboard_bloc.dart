@@ -59,7 +59,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         if (cachedMovies.isEmpty) {
           emit(
             state.copyWith(
-              toastMessage: "Please connect to Internet",
+              toastMessage: "pleaseConnectToInternet".loc,
               status: ScreenStatus.success,
             ),
           );
@@ -101,7 +101,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       emit(
         state.copyWith(
           status: ScreenStatus.failure,
-          toastMessage: "Failed to load movies",
+          toastMessage: "failedToLoadMovies".loc,
         ),
       );
       debugPrint(e.toString());

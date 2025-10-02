@@ -59,7 +59,7 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
         if (cachedMovies.isEmpty) {
           emit(
             state.copyWith(
-              toastMessage: "Please connect to Internet",
+              toastMessage: "pleaseConnectToInternet",
               status: ScreenStatus.success,
             ),
           );
@@ -101,7 +101,7 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
       emit(
         state.copyWith(
           status: ScreenStatus.failure,
-          toastMessage: "Failed to load movies",
+          toastMessage: "failedToLoadMovies",
         ),
       );
       debugPrint(e.toString());

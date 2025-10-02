@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb/core/utilities/common_utilities.dart';
 
 class RetryView extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const RetryView({
+  RetryView({
     super.key,
-    this.message = "Something went wrong",
+    String? message, // nullable
     required this.onRetry,
-  });
+  }) : message = message ?? "somethingWentWrong".loc; // assign here
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class RetryView extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: onRetry,
             icon: const Icon(Icons.refresh, size: 20),
-            label: const Text("Retry"),
+            label: Text("retry".loc),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(

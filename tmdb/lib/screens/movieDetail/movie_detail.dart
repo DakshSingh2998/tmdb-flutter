@@ -71,8 +71,8 @@ class _MovieDetailViewState extends State<MovieDetailView> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.toastMessage)));
+            _bloc.add(ClearToastMessage());
           }
-          _bloc.add(ClearToastMessage());
         },
         builder: (context, state) {
           return Scaffold(
@@ -80,7 +80,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
               title: Text(movie.title),
 
               actions: widget.showSaveButton
-                  ? (state.status == ScreenStatus.loading)
+                  ? ((state.status == ScreenStatus.loading)
                         ? [
                             Container(
                               width: 20,
@@ -103,7 +103,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                                 );
                               },
                             ),
-                          ]
+                          ])
                   : null,
             ),
             body: SingleChildScrollView(
@@ -201,20 +201,6 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                     ],
                   ),
                   const SizedBox(height: 12),
-
-                  // Adult flag
-                  if (movie.adult == true)
-                    Row(
-                      children: const [
-                        Icon(Icons.warning, size: 18, color: Colors.redAccent),
-                        SizedBox(width: 4),
-                        Text(
-                          "Adult Content",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  if (movie.adult == true) const SizedBox(height: 12),
 
                   // Genres (just IDs here, you can map IDs to names)
                   if (movie.genreIds?.isNotEmpty == true)

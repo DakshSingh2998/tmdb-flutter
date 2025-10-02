@@ -108,7 +108,7 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
             status: ScreenStatus.success,
             movies: movies,
             currentPage: event.page,
-            hasReachedMax: movies.isEmpty,
+            hasReachedMax: cachedMovies.isEmpty,
             toastMessage:
                 "Performing local search, Please connect to internet.",
           ),
