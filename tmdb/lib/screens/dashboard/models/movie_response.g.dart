@@ -17,10 +17,10 @@ class MovieResponseAdapter extends TypeAdapter<MovieResponse> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MovieResponse(
-      page: fields[0] as int,
+      page: fields[0] as int?,
       results: (fields[1] as List).cast<Movie>(),
-      totalPages: fields[2] as int,
-      totalResults: fields[3] as int,
+      totalPages: fields[2] as int?,
+      totalResults: fields[3] as int?,
     );
   }
 

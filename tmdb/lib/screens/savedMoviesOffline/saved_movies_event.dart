@@ -6,8 +6,9 @@ abstract class SavedMoviesEvent extends Equatable {
 }
 
 class FetchMovies extends SavedMoviesEvent {
-  FetchMovies();
+  int page;
+  FetchMovies({required this.page});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [page];
 }

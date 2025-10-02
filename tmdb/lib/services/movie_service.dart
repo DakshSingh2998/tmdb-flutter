@@ -57,4 +57,29 @@ class MovieRepository {
       throw Exception("Failed to load movie details: $e");
     }
   }
+
+  Future<MovieResponse> searchMovies({
+    required String query,
+    int page = 1,
+  }) async {
+    try {
+      final dio = DioClient().dio;
+      final client = RestClient(dio);
+      final response = await client.searchMovies(query, page);
+      return response;
+    } catch (e) {
+      throw Exception("Failed to search movies: $e");
+    }
+  }
+
+  Future<MovieResponse> fetchNowPlaying({int page = 1}) async {
+    try {
+      final dio = DioClient().dio;
+      final client = RestClient(dio);
+      final response = await client.getNowPlaying(page);
+      return response;
+    } catch (e) {
+      throw Exception("Failed to load movies: $e");
+    }
+  }
 }

@@ -31,6 +31,15 @@ abstract class RestClient {
 
   @GET('movie/{movie_id}')
   Future<Movie> getMovieDetails(@Path('movie_id') int movieId);
+
+  @GET('search/movie?query={query}&page={page}')
+  Future<MovieResponse> searchMovies(
+    @Path('query') String query,
+    @Path('page') int page,
+  );
+
+  @GET('movie/now_playing')
+  Future<MovieResponse> getNowPlaying(@Query('page') int page);
 }
 
 class DioClient {

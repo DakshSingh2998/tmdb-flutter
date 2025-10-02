@@ -1,5 +1,7 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../core/network/check_network.dart';
 import '../../core/utilities/common_utilities.dart';
@@ -15,7 +17,14 @@ class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
   SavedMoviesBloc({MovieRepository? movieRepository})
     : movieRepository = movieRepository ?? MovieRepository(),
       super(SavedMoviesState()) {
-    on<FetchMovies>(_onFetchMovies);
+    on<FetchMovies>(
+      _onFetchMovies,
+      transformer: (events, mapper) {
+        final paginated = sequential<FetchMovies>().call(events, mapper);
+
+        return MergeStream([paginated]);
+      },
+    );
     on<ClearToastMessage>((event, emit) {
       emit(state.copyWith(toastMessage: ""));
     });
@@ -27,7 +36,6 @@ class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
   ) async {
     try {
       emit(state.copyWith(status: ScreenStatus.loading));
-      // No cache, fetch and save
       final hasConnection = await hasInternetConnection();
       if (!hasConnection) {
         emit(state.copyWith(status: ScreenStatus.failure));
@@ -50,7 +58,7 @@ class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
           status: ScreenStatus.success,
           movies: List.of(state.movies)..addAll(response.results),
           currentPage: response.page,
-          hasReachedMax: response.page >= response.totalPages,
+          hasReachedMax: (response.page ?? 0) >= (response.totalPages ?? 0),
         ),
       );
     } catch (e) {

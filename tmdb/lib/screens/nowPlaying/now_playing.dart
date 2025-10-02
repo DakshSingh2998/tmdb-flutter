@@ -6,26 +6,26 @@ import '../../reusable_views/movie_card.dart';
 import '../../reusable_views/retry_view.dart';
 import '../../services/movie_service.dart';
 import '../movieDetail/movie_detail.dart';
-import 'dashboard_bloc.dart';
-import 'dashboard_event.dart';
-import 'dashboard_state.dart';
+import 'now_playing_bloc.dart';
+import 'now_playing_event.dart';
+import 'now_playing_state.dart';
 
-class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+class NowPlayingView extends StatefulWidget {
+  const NowPlayingView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<NowPlayingView> createState() => _NowPlayingViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
-  late final DashboardBloc _bloc;
+class _NowPlayingViewState extends State<NowPlayingView> {
+  late final NowPlayingBloc _bloc;
   late final ScrollController _scrollController;
   DateTime? _lastToastShown;
 
   @override
   void initState() {
     super.initState();
-    _bloc = DashboardBloc(MovieRepository())..add(FetchMovies(1));
+    _bloc = NowPlayingBloc(MovieRepository())..add(FetchMovies(1));
     _scrollController = ScrollController()..addListener(_onScroll);
   }
 
@@ -52,8 +52,8 @@ class _DashboardViewState extends State<DashboardView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Dashboard")),
-        body: BlocConsumer<DashboardBloc, DashboardState>(
+        appBar: AppBar(title: const Text("Now Playing")),
+        body: BlocConsumer<NowPlayingBloc, NowPlayingState>(
           listenWhen: (previous, current) =>
               previous.toastMessage != current.toastMessage,
           listener: (context, state) {
@@ -115,11 +115,15 @@ class _DashboardViewState extends State<DashboardView> {
                     overview: movie.overview,
                     posterPath: movie.posterPath,
                     isGrid: true,
+
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => MovieDetailView(movie: movie),
+                          builder: (_) => MovieDetailView(
+                            movie: movie,
+                            showSaveButton: false,
+                          ),
                         ),
                       );
                     },

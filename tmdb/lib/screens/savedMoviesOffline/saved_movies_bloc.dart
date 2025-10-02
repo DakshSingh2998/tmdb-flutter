@@ -5,12 +5,14 @@ import '../../core/network/check_network.dart';
 import '../../core/utilities/common_utilities.dart';
 import '../../core/utilities/hive/bookmark_movie/bookmark_movie.dart';
 import '../../core/utilities/hive/popularMovieCache/popular_movie_cache.dart';
+import '../../core/utilities/sql/movies_db_helper.dart';
 import '../../services/movie_service.dart';
 import '../dashboard/models/movie_response.dart';
 import 'saved_movies_event.dart';
 import 'saved_movies_state.dart';
 
 class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
+  final dbHelper = MovieDBHelper();
   SavedMoviesBloc() : super(const SavedMoviesState()) {
     on<FetchMovies>(_onFetchMovies);
   }
@@ -20,39 +22,25 @@ class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
     Emitter<SavedMoviesState> emit,
   ) async {
     try {
+      if (state.status == ScreenStatus.loading) {
+        return;
+      }
       emit(state.copyWith(status: ScreenStatus.loading));
 
-      final cacheManager = await PopularMovieCacheManager.getInstance();
       final bookmarkManager = await BookmarkedMovieManager.getInstance();
-
-      List<Movie> allMovies = [];
-      int page = 1;
-
-      while (true) {
-        MovieResponse? cachedPage;
-        try {
-          cachedPage = await cacheManager.getPage(page);
-        } catch (e) {
-          debugPrint('Error fetching cached page $page: $e');
-          break;
-        }
-
-        if (cachedPage == null || cachedPage.results.isEmpty) {
-          break; // No more pages
-        }
-
-        allMovies.addAll(cachedPage.results);
-        page++;
-      }
-
-      // Filter movies by bookmarked IDs
       final bookmarkedIds = bookmarkManager.allBookmarkedIds.toSet();
-      final bookmarkedMovies = allMovies
-          .where((movie) => bookmarkedIds.contains(movie.id))
-          .toList();
+
+      List<Movie> allMovies = await dbHelper.getMoviesByPage(
+        event.page,
+        ids: bookmarkedIds,
+      );
 
       emit(
-        state.copyWith(status: ScreenStatus.success, movies: bookmarkedMovies),
+        state.copyWith(
+          status: ScreenStatus.success,
+          movies: event.page == 1 ? allMovies : [...state.movies, ...allMovies],
+          hasReachedMax: allMovies.length < 20,
+        ),
       );
     } catch (e) {
       debugPrint('Error fetching saved movies: $e');

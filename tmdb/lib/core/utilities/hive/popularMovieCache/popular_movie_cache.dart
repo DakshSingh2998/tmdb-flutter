@@ -18,7 +18,7 @@ class PopularMovieCacheManager {
 
   Future<void> init() async {
     try {
-      await getPage(1); // preload first page
+      await getPage(1);
     } catch (_) {}
   }
 
@@ -26,7 +26,7 @@ class PopularMovieCacheManager {
     final manager = await getPageManager();
     final key = 'page_${pageData.page}';
     await manager.saveWithKey(key, pageData);
-    _cachedPages[pageData.page] = pageData;
+    _cachedPages[pageData.page ?? 0] = pageData;
   }
 
   Future<MovieResponse?> getPage(int page) async {
@@ -45,7 +45,6 @@ class PopularMovieCacheManager {
     _cachedPages.clear();
   }
 
-  /// Access in-memory page
   MovieResponse? get memoryPageOne => _cachedPages[1];
 
   Future<CommonManager<MovieResponse, MovieResponseAdapter>>

@@ -19,11 +19,23 @@ class SavedMovies extends StatefulWidget {
 
 class _SavedMovieState extends State<SavedMovies> with RouteAware {
   late final SavedMoviesBloc _bloc;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _bloc = SavedMoviesBloc()..add(FetchMovies());
+    _bloc = SavedMoviesBloc()..add(FetchMovies(page: 1));
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      final state = _bloc.state;
+      if (!state.hasReachedMax && state.status != ScreenStatus.loading) {
+        _bloc.add(FetchMovies(page: state.currentPage + 1));
+      }
+    }
   }
 
   @override
@@ -44,7 +56,9 @@ class _SavedMovieState extends State<SavedMovies> with RouteAware {
   @override
   void didPopNext() {
     super.didPopNext();
-    _bloc.add(FetchMovies()); // Refresh movies when returning to this screen
+    _bloc.add(
+      FetchMovies(page: 1),
+    ); // Refresh movies when returning to this screen
   }
 
   @override
@@ -64,7 +78,7 @@ class _SavedMovieState extends State<SavedMovies> with RouteAware {
                 child: RetryView(
                   message: "Failed to load movies",
                   onRetry: () {
-                    _bloc.add(FetchMovies());
+                    _bloc.add(FetchMovies(page: 1));
                   },
                 ),
               );
@@ -72,6 +86,7 @@ class _SavedMovieState extends State<SavedMovies> with RouteAware {
             return state.status == ScreenStatus.success && state.movies.isEmpty
                 ? Center(child: Text("No bookmarked movies"))
                 : GridView.builder(
+                    controller: _scrollController,
                     padding: const EdgeInsets.all(8),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(

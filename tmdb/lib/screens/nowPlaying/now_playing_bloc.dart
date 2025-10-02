@@ -7,15 +7,15 @@ import '../../core/network/check_network.dart';
 import '../../core/utilities/common_utilities.dart';
 import '../../core/utilities/sql/movies_db_helper.dart';
 import '../../services/movie_service.dart';
-import 'dashboard_event.dart';
-import 'dashboard_state.dart';
-import 'models/movie_response.dart';
+import '../dashboard/models/movie_response.dart';
+import 'now_playing_event.dart';
+import 'now_playing_state.dart';
 
-class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
+class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
   final MovieRepository movieRepository;
   final dbHelper = MovieDBHelper();
 
-  DashboardBloc(this.movieRepository) : super(const DashboardState()) {
+  NowPlayingBloc(this.movieRepository) : super(const NowPlayingState()) {
     on<FetchMovies>(
       _onFetchMovies,
       transformer: (events, mapper) {
@@ -30,14 +30,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
   Future<void> _onFetchMovies(
     FetchMovies event,
-    Emitter<DashboardState> emit,
+    Emitter<NowPlayingState> emit,
   ) async {
     try {
       if (state.status == ScreenStatus.loading) return;
 
       emit(state.copyWith(status: ScreenStatus.loading));
 
-      final cachedMovies = await dbHelper.getMoviesByPage(
+      final cachedMovies = await dbHelper.getNowPlayingMoviesByPage(
         event.page,
         pageSize: 20,
       );
@@ -57,7 +57,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
       if (!await hasInternetConnection()) return;
 
-      final response = await movieRepository.fetchMovies(page: event.page);
+      final response = await movieRepository.fetchNowPlaying(page: event.page);
       final apiMovies = response.results;
 
       if (apiMovies.isEmpty) return;
@@ -69,7 +69,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
               .toSet();
 
       for (final movie in apiMovies) {
-        await dbHelper.insertOrUpdateMovie(movie);
+        await dbHelper.insertOrUpdateNowPlayingMovie(movie);
         if (!existingIds.contains(movie.id)) hasNewData = true;
       }
 

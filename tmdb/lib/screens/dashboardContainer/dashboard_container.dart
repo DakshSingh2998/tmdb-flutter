@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../dashboard/dashboard.dart';
+import '../nowPlaying/now_playing.dart';
 import '../savedMoviesOffline/saved_movies.dart';
 import '../searchMovie/search_movie.dart';
 
@@ -13,7 +14,7 @@ class DashboardContainerView extends StatefulWidget {
 class _DashboardContainerViewState extends State<DashboardContainerView> {
   late List<Widget?> screenCache;
   int tabIndex = 0;
-  final icons = [Icons.home, Icons.search, Icons.bookmark];
+  final icons = [Icons.home, Icons.play_arrow, Icons.search, Icons.bookmark];
 
   @override
   void initState() {
@@ -76,12 +77,15 @@ class _DashboardContainerViewState extends State<DashboardContainerView> {
   void _selectedTab(int index) {
     if (screenCache[index] == null) {
       switch (index) {
-        case 1:
+        case 2:
           screenCache[index] = const SearchMovieView();
+          break;
+        case 1:
+          screenCache[index] = const NowPlayingView();
           break;
       }
     }
-    if (index == 2) {
+    if (index == 3) {
       screenCache[index] = SavedMovies(key: UniqueKey());
     }
 

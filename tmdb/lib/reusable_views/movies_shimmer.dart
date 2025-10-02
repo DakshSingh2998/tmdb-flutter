@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MovieShimmer extends StatelessWidget {
-  final bool isGrid; // same as MovieCard to adapt design
+  final bool isGrid;
 
   const MovieShimmer({super.key, this.isGrid = true});
 
@@ -33,7 +33,7 @@ class MovieShimmer extends StatelessWidget {
         Shimmer(
           duration: const Duration(milliseconds: 1500),
           child: Container(
-            height: 180,
+            height: 280,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.grey.shade300,

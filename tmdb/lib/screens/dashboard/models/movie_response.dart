@@ -6,16 +6,16 @@ part 'movie_response.g.dart';
 @JsonSerializable()
 @HiveType(typeId: 2)
 class MovieResponse extends HiveObject {
-  final int page;
+  final int? page;
 
   @JsonKey(name: "results")
   final List<Movie> results;
 
   @JsonKey(name: "total_pages")
-  final int totalPages;
+  final int? totalPages;
 
   @JsonKey(name: "total_results")
-  final int totalResults;
+  final int? totalResults;
 
   MovieResponse({
     required this.page,
@@ -31,7 +31,7 @@ class MovieResponse extends HiveObject {
 }
 
 @JsonSerializable()
-@HiveType(typeId: 2)
+@HiveType(typeId: 1)
 class Movie extends HiveObject {
   final int id;
 
