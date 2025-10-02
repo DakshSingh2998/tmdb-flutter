@@ -57,7 +57,7 @@ class SavedMoviesBloc extends Bloc<SavedMoviesEvent, SavedMoviesState> {
         state.copyWith(
           status: ScreenStatus.success,
           movies: List.of(state.movies)..addAll(response.results),
-          currentPage: response.page,
+          currentPage: event.page,
           hasReachedMax: (response.page ?? 0) >= (response.totalPages ?? 0),
         ),
       );

@@ -75,7 +75,7 @@ class MovieCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: _buildPoster(height: 260, width: double.infinity),
+          child: _buildPoster(height: 280, width: double.infinity),
         ),
         Spacer(),
         Padding(

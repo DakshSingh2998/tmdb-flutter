@@ -55,7 +55,7 @@ class _DashboardViewState extends State<DashboardView> {
         appBar: AppBar(title: Text("dashboard".loc)),
         body: BlocConsumer<DashboardBloc, DashboardState>(
           listenWhen: (previous, current) =>
-              previous.toastMessage != current.toastMessage,
+              true,
           listener: (context, state) {
             if (state.toastMessage.isEmpty == false) {
               final now = DateTime.now();
