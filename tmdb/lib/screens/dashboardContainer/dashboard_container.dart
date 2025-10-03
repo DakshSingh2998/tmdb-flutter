@@ -14,7 +14,12 @@ class DashboardContainerView extends StatefulWidget {
 class _DashboardContainerViewState extends State<DashboardContainerView> {
   late List<Widget?> screenCache;
   int tabIndex = 0;
-  final icons = [Icons.home, Icons.play_arrow, Icons.search, Icons.bookmark];
+  final icons = [
+    (Icons.home, "Home"),
+    (Icons.play_arrow, "Now Playing"),
+    (Icons.search, "Search"),
+    (Icons.bookmark, "Bookmark"),
+  ];
 
   @override
   void initState() {
@@ -54,11 +59,24 @@ class _DashboardContainerViewState extends State<DashboardContainerView> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
-                      child: Icon(icons[index]),
+                      child: Column(
+                        children: [
+                          Icon(icons[index].$1),
+                          Text(icons[index].$2, style: TextStyle(fontSize: 12)),
+                        ],
+                      ),
                     )
-                  : Icon(
-                      icons[index],
-                      color: Colors.grey, // inactive icon color
+                  : Column(
+                      children: [
+                        Icon(
+                          icons[index].$1,
+                          color: Colors.grey, // inactive icon color
+                        ),
+                        Text(
+                          icons[index].$2,
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
                     ),
             );
           }),
