@@ -46,7 +46,7 @@ class MovieCard extends StatelessWidget {
       contentPadding: const EdgeInsets.all(12),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: _buildPoster(width: 60, height: 90),
+        child: _buildPoster(width: 60),
       ),
       title: Text(
         title,
@@ -75,7 +75,7 @@ class MovieCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: _buildPoster(height: 280, width: double.infinity),
+          child: _buildPoster(width: double.infinity),
         ),
         Spacer(),
         Padding(
@@ -93,30 +93,30 @@ class MovieCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPoster({double? width, double? height}) {
+  Widget _buildPoster({double? width}) {
     if (posterPath == null) {
       return Container(
         width: width,
-        height: height,
         color: Colors.grey.shade200,
         child: const Icon(Icons.movie, size: 40),
       );
     }
 
-    return CachedNetworkImage(
-      imageUrl: "https://image.tmdb.org/t/p/w300$posterPath",
+    return SizedBox(
       width: width,
-      height: height,
-      fit: BoxFit.cover,
-      progressIndicatorBuilder: (context, url, downloadProgress) => Shimmer(
-        duration: Duration(milliseconds: 1500),
-        child: Container(
-          width: width,
-          height: height,
-          color: Colors.grey.shade300,
+      child: AspectRatio(
+        aspectRatio: 2 / 2.8,
+        child: CachedNetworkImage(
+          imageUrl: "https://image.tmdb.org/t/p/w300$posterPath",
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (context, url, downloadProgress) => Shimmer(
+            duration: const Duration(milliseconds: 1500),
+            child: Container(color: Colors.grey.shade300),
+          ),
+          errorWidget: (context, url, error) =>
+              const Icon(Icons.error, size: 40),
         ),
       ),
-      errorWidget: (context, url, error) => const Icon(Icons.error, size: 40),
     );
   }
 }

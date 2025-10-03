@@ -101,7 +101,7 @@ class NowPlayingBloc extends Bloc<NowPlayingEvent, NowPlayingState> {
       emit(
         state.copyWith(
           status: ScreenStatus.failure,
-          toastMessage: "failedToLoadMovies",
+          toastMessage: "failedToLoadMovies".loc,
         ),
       );
       debugPrint(e.toString());

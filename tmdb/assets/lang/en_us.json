@@ -8,6 +8,7 @@
     "Markedasfavorite": "Marked as favorite",
     "Removedfromfavourite": "Removed from favourite",
     "beginTyping": "Begin typing to search movies",
-    "Search": "Search"
+    "Search": "Search",
+    "performingLocalSearch": "Performing local search, Please connect to internet."
 
 }

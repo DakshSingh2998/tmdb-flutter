@@ -79,7 +79,7 @@ class _NowPlayingViewState extends State<NowPlayingView> {
             if (state.status == ScreenStatus.failure && state.movies.isEmpty) {
               return Center(
                 child: RetryView(
-                  message: "failedToLoadMovies",
+                  message: "failedToLoadMovies".loc,
                   onRetry: () {
                     _bloc.add(FetchMovies(state.currentPage + 1));
                   },

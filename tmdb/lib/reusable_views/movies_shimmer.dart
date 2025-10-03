@@ -30,29 +30,36 @@ class MovieShimmer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Shimmer(
-          duration: const Duration(milliseconds: 1500),
-          child: Container(
-            height: 300,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
+        // Poster shimmer with same aspect ratio as MovieCard
+        AspectRatio(
+          aspectRatio: 2 / 2.8,
+          child: Shimmer(
+            duration: const Duration(milliseconds: 1500),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        // Title shimmer
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Shimmer(
             duration: const Duration(milliseconds: 1500),
             child: Container(
               height: 14,
+              width: double.infinity,
               color: Colors.grey.shade300,
             ),
           ),
         ),
+        const SizedBox(height: 8),
       ],
     );
   }
@@ -62,18 +69,22 @@ class MovieShimmer extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          Shimmer(
-            duration: const Duration(milliseconds: 1500),
-            child: Container(
-              width: 60,
-              height: 90,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(8),
+          // Poster shimmer with aspect ratio
+          AspectRatio(
+            aspectRatio: 2 / 2.8,
+            child: Shimmer(
+              duration: const Duration(milliseconds: 1500),
+              child: Container(
+                width: 60, // width controlled by ListTile leading
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
           const SizedBox(width: 12),
+          // Text shimmer
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
