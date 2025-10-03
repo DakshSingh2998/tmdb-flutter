@@ -65,7 +65,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
       onPressed: () {
         final uri = Uri(
           scheme: 'tmdb',
-          host: 'example.com.emdb',
+          host: 'example.com.tmdb',
           path: '/movie?movieId=${movie.id}',
         );
         final params = ShareParams(uri: uri);
