@@ -31,11 +31,13 @@ class MovieDetailDeeplinkState extends State<MovieDetailDeeplink> {
       final movie = await movieRepository.fetchMovieDetails(
         movieId: widget.movieId,
       );
+      if (!mounted) return;
       setState(() {
         this.movie = movie;
         status = ScreenStatus.success;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         status = ScreenStatus.failure;
       });
@@ -45,9 +47,9 @@ class MovieDetailDeeplinkState extends State<MovieDetailDeeplink> {
   @override
   Widget build(BuildContext context) {
     return (status == ScreenStatus.loading)
-        ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+        ?  Scaffold(appBar: AppBar(title: Text(widget.movieId.toString()),), body: Center(child: CircularProgressIndicator()))
         : (movie != null)
         ? MovieDetailView(movie: movie!, showSaveButton: false)
-        : Scaffold(body: Center(child: Text("Failed to load movie details")));
+        : Scaffold(appBar: AppBar(title: Text(widget.movieId.toString()),),body: Center(child: Text("failedToLoadMovies".loc)));
   }
 }

@@ -58,7 +58,7 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
         state.copyWith(
           status: ScreenStatus.loading,
           movies: [],
-          currentPage: 1,
+          currentPage: 0,
           hasReachedMax: false,
         ),
       );
@@ -68,7 +68,7 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
         state.copyWith(
           status: ScreenStatus.initial,
           movies: [],
-          currentPage: 1,
+          currentPage: 0,
           hasReachedMax: false,
         ),
       );
@@ -90,7 +90,7 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchMovieState> {
           state.copyWith(
             status: ScreenStatus.success,
             movies: movies,
-            currentPage: response.page,
+            currentPage: event.page,
             hasReachedMax: (response.page ?? 0) >= (response.totalPages ?? 0),
           ),
         );

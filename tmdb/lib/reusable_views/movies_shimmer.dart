@@ -33,7 +33,7 @@ class MovieShimmer extends StatelessWidget {
         Shimmer(
           duration: const Duration(milliseconds: 1500),
           child: Container(
-            height: 280,
+            height: 300,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.grey.shade300,
@@ -44,12 +44,11 @@ class MovieShimmer extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           child: Shimmer(
             duration: const Duration(milliseconds: 1500),
             child: Container(
               height: 14,
-              width: 100,
               color: Colors.grey.shade300,
             ),
           ),
