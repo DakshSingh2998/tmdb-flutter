@@ -30,11 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="tmdb" android:host="com.example.tmdb" />
+             <data
+            android:scheme="https"
+             android:host="dakshsingh2998.github.io"
+            android:pathPrefix="/tmdb-flutter/movie" />
             </intent-filter>
 
 

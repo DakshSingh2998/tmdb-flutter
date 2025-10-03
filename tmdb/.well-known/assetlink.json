@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.tmdb",
+      "sha256_cert_fingerprints": [
+        "0D:40:E4:A6:23:F0:20:8D:36:BA:70:2A:71:62:F0:D4:A4:5F:4D:6E:66:A2:66:00:18:BF:FD:39:13:D8:B0:01"
+      ]
+    }
+  }
+]
