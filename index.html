@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMDB Flutter Deep Link</title>
+</head>
+<body>
+  <h1>TMDB Flutter</h1>
+  <p>If you see this page, click the button below to open the app:</p>
+
+  <!-- Deeplink example -->
+  <button id="openApp">Open Movie</button>
+
+  <script>
+    document.getElementById('openApp').addEventListener('click', () => {
+      // Replace with your actual deeplink scheme
+      const movieId = 1382406;
+      const deeplink = `tmdb://com.example.tmdb/movie?movieId=${movieId}`;
+      
+      // Attempt to open app via deeplink
+      window.location.href = deeplink;
+
+      // Optional: fallback to store or web if app not installed
+      setTimeout(() => {
+        window.location.href = `https://dakshsingh2998.github.io/tmdb-flutter/movie/${movieId}`;
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
