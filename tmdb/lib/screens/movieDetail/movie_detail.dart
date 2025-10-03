@@ -9,7 +9,8 @@ import '../../services/movie_service.dart';
 import '../dashboard/models/movie_response.dart';
 import 'movie_detail_bloc.dart';
 import 'movie_detail_event.dart';
-import 'movie_detail_state.dart'; // Import your Bloc or Cubit
+import 'movie_detail_state.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MovieDetailView extends StatefulWidget {
   final Movie movie;
@@ -59,6 +60,19 @@ class _MovieDetailViewState extends State<MovieDetailView> {
   @override
   Widget build(BuildContext context) {
     final movie = widget.movie;
+    final shareButton = IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: () {
+        final uri = Uri(
+          scheme: 'tmdb',
+          host: 'example.com.emdb',
+          path: '/movie?movieId=${movie.id}',
+        );
+        final params = ShareParams(uri: uri);
+
+        SharePlus.instance.share(params);
+      },
+    );
 
     return BlocProvider.value(
       value: _bloc,
@@ -87,6 +101,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                               height: 20,
                               child: CircularProgressIndicator(),
                             ),
+                            shareButton,
                           ]
                         : [
                             IconButton(
@@ -103,8 +118,9 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                                 );
                               },
                             ),
+                            shareButton,
                           ])
-                  : null,
+                  : [shareButton],
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
