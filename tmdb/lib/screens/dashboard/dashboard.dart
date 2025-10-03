@@ -52,7 +52,7 @@ class _DashboardViewState extends State<DashboardView> {
     return BlocProvider.value(
       value: _bloc,
       child: Scaffold(
-        appBar: AppBar(title: Text("Home".loc)),
+        appBar: AppBar(title: Text("Trending".loc)),
         body: BlocConsumer<DashboardBloc, DashboardState>(
           listenWhen: (previous, current) => true,
           listener: (context, state) {

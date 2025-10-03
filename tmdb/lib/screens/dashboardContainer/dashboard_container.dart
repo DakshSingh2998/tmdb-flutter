@@ -15,7 +15,7 @@ class _DashboardContainerViewState extends State<DashboardContainerView> {
   late List<Widget?> screenCache;
   int tabIndex = 0;
   final icons = [
-    (Icons.home, "Home"),
+    (Icons.home, "Trending"),
     (Icons.play_arrow, "Now Playing"),
     (Icons.search, "Search"),
     (Icons.bookmark, "Bookmark"),
