@@ -48,10 +48,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initDeepLinks() async {
-    // Handle links
     _linkSubscription = AppLinks().uriLinkStream.listen((uri) {
-      debugPrint('onAppLink: $uri');
-      openAppLink(uri);
+      if (uri == null) return;
+
+      // Decode percent-encoded URI just in case
+      final decodedUri = Uri.parse(Uri.decodeFull(uri.toString()));
+      debugPrint('onAppLink: $decodedUri');
+
+      openAppLink(decodedUri);
     });
   }
 
